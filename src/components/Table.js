@@ -11,10 +11,12 @@ const CustomTable = ({
   pagination,
   rowSelection,
   expandable,
+  loading = false,
 }) => {
   return (
     <Wrapper>
       <Table
+        loading={loading}
         columns={columns}
         dataSource={data}
         scroll={scroll}
@@ -36,6 +38,7 @@ const CustomTable = ({
               }
             : false
         }
+        rowKey={(record) => record?.id || ""}
       />
     </Wrapper>
   );
