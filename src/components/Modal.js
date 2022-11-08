@@ -13,7 +13,7 @@ const CustomModal = ({ show, onClose, children }) => {
     <>
       <Modal
         title={false}
-        visible={show}
+        open={show}
         onCancel={onClose}
         footer={null}
         bodyStyle={{

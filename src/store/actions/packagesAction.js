@@ -26,4 +26,20 @@ const getPackages = async () => {
   }
 };
 
-export { getPackages };
+/**
+ * Method to obtain list of packages
+ */
+const savePackages = async (body) => {
+  try {
+    const result = await requestApi(packages, "POST", body);
+    const { ok } = result;
+    if (ok) return ok;
+    else return ok;
+  } catch (e) {
+    console.error("||* ==> Error savePackages <== *||", e);
+    alertNotification("Error", "Error saving information", "error");
+    return [];
+  }
+};
+
+export { getPackages, savePackages };
