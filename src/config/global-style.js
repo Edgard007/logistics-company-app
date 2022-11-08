@@ -15,6 +15,15 @@ const themes = {
 const Wrapper = styled.div`
   margin: 0px;
   padding: 0px;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 0;
+  }
 `;
 
 export { themes, Wrapper };

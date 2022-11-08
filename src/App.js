@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
 // ==> Components
 import Table from "./components/Table";
 
+// ==> Actions
+import { getPackages } from "./store/actions/packagesAction";
+
 const App = () => {
+  //* ==> STATES <== *//
+  const [loading, setLoading] = useState(false);
+
+  // ==> For the storage of arrays
+  const [packages, setPackages] = useState([]);
+
   const columns = [
     {
       title: "Name",
@@ -15,11 +24,27 @@ const App = () => {
     },
     {
       title: "Status",
-      dataIndex: "status",
+      dataIndex: "statusName",
       align: "center",
       with: 300,
     },
   ];
+
+  const get = async () => {
+    setLoading(true); // ==> Show loading
+    try {
+      const packags = await getPackages();
+      setPackages(packags || []);
+    } catch (e) {
+      console.error("||* ==> Error getPackages <== *||", e);
+    }
+    setLoading(false); // ==> Hide loading
+  };
+
+  useEffect(() => {
+    console.clear();
+    get();
+  }, []);
 
   return (
     <Wrapper>
@@ -27,13 +52,15 @@ const App = () => {
         <h1>Logistics company</h1>
       </div>
       <div className="containBody">
-        <Table columns={columns} />
+        <Table columns={columns} data={packages} loading={loading} />
       </div>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  margin: 20px;
+
   .title {
     display: flex;
     justify-content: center;
