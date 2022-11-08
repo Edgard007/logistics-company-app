@@ -27,7 +27,7 @@ const getPackages = async () => {
 };
 
 /**
- * Method to obtain list of packages
+ * Method for saving a new package
  */
 const savePackages = async (body) => {
   try {
@@ -42,4 +42,26 @@ const savePackages = async (body) => {
   }
 };
 
-export { getPackages, savePackages };
+/**
+ * Method to modify a package
+ */
+const editPackages = async (body) => {
+  try {
+    // ==> Obtain ID
+    const id = body?.id || "";
+    if (!id) return false;
+
+    const url = `${packages}/${id}`;
+
+    const result = await requestApi(url, "PUT", body);
+    const { ok } = result;
+    if (ok) return ok;
+    else return ok;
+  } catch (e) {
+    console.error("||* ==> Error savePackages <== *||", e);
+    alertNotification("Error", "Error saving information", "error");
+    return [];
+  }
+};
+
+export { getPackages, savePackages, editPackages };

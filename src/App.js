@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
+import { Modal as ModalANTD } from "antd";
 
 // ==> Components
 import Table from "./components/Table";
 import Modal from "./components/Modal";
 
 // ==> Actions
-import { getPackages } from "./store/actions/packagesAction";
+import { getPackages, editPackages } from "./store/actions/packagesAction";
 
 // ==> Pages
 import AddPackages from "./pages/AddPackages";
 
+// ==> Helper
+import { alertNotification } from "./helpers/notifications";
+
+const { useModal } = ModalANTD;
+
 const App = () => {
+  const [modal, contextHolder] = useModal();
+
   //* ==> STATES <== *//
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -33,6 +41,21 @@ const App = () => {
       align: "center",
       with: 300,
     },
+    {
+      title: "Actions",
+      dataIndex: "status",
+      align: "center",
+      with: 100,
+      render: (text, record) =>
+        text === "I" && (
+          <img
+            src="./icons/sendIcon.png"
+            className="sendIcon"
+            alt=""
+            onClick={() => changeStatus(record)}
+          />
+        ),
+    },
   ];
 
   const get = async () => {
@@ -46,6 +69,36 @@ const App = () => {
     setLoading(false); // ==> Hide loading
   };
 
+  const change = async (record) => {
+    setLoading(true); // ==> Show loading
+    try {
+      const body = {
+        ...record,
+        status: "E",
+        statusName: "Sent",
+      };
+      const ok = await editPackages(body);
+      if (ok) {
+        get();
+        alertNotification(
+          "Success",
+          "Information entered correctly",
+          "success"
+        );
+      }
+    } catch (e) {
+      console.error("||* ==> Error editPackages <== *||", e);
+    }
+    setLoading(false); // ==> Hide loading
+  };
+
+  const changeStatus = (record) => {
+    modal.confirm({
+      title: "Would you like to send this package?",
+      onOk: () => change(record),
+    });
+  };
+
   useEffect(() => {
     console.clear();
     get();
@@ -53,6 +106,7 @@ const App = () => {
 
   return (
     <Wrapper>
+      {contextHolder}
       <div className="title">
         <h1>Logistics company</h1>
       </div>
@@ -75,6 +129,11 @@ const App = () => {
           onOk={() => {
             setShowModal(false); // ==> Hide modal
             get();
+            alertNotification(
+              "Success",
+              "Information entered correctly",
+              "success"
+            );
           }}
         />
       </Modal>
@@ -107,6 +166,13 @@ const Wrapper = styled.div`
       align-items: center;
       margin: 10px;
     }
+  }
+
+  .sendIcon {
+    width: 30px;
+    height: 30px;
+    transform: rotate(-25deg);
+    cursor: pointer;
   }
 `;
 

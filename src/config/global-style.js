@@ -46,6 +46,36 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 400;
   }
 
+
+  .ant-btn-primary {
+    background: ${(props) => props?.theme?.blue} !important;
+    color: ${(props) => props?.theme?.primary} !important;
+    border: 1px solid !important;
+    border-color: ${(props) => props?.theme?.primary} !important;
+    border-radius: 15px;
+    padding: 5px 25px !important;
+  }
+
+  .ant-btn-primary:hover {
+    border: 1px solid !important;
+    border-color: ${(props) => props?.theme?.gray} !important;
+  }
+
+  .ant-btn-default {
+    background: ${(props) => props?.theme?.gray} !important;
+    color: ${(props) => props?.theme?.secGray} !important;
+    border: 1px solid !important;
+    border-color: ${(props) => props?.theme?.secGray} !important;
+    border-radius: 15px;
+    padding: 5px 25px !important;
+  }
+
+  .ant-btn-default:hover {
+    background: ${(props) => props?.theme?.secGray} !important;
+    color: ${(props) => props?.theme?.primary} !important;
+  }
+
+
   /* Custom modals */
   .ant-modal-content {
     border-radius: 15px !important;
