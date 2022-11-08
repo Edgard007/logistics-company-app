@@ -4,13 +4,17 @@ import styled from "styled-components";
 
 import { Table } from "antd";
 
+/**
+ * Custom table component
+ * @property {array} columns Table columns
+ * @property {array} data Data to display
+ * @property {object} scroll Scroll settings
+ * @property {boolean} loading Flag to control action "loading".
+ */
 const CustomTable = ({
   columns = [],
   data = [],
   scroll = {},
-  pagination,
-  rowSelection,
-  expandable,
   loading = false,
 }) => {
   return (
@@ -20,17 +24,8 @@ const CustomTable = ({
         columns={columns}
         dataSource={data}
         scroll={scroll}
-        rowSelection={rowSelection || false}
-        expandable={expandable || false}
         pagination={
-          pagination
-            ? {
-                ...pagination,
-                size: "small",
-                showSizeChanger: false,
-                responsive: true,
-              }
-            : data.length > 10
+          data.length > 10
             ? {
                 size: "small",
                 showSizeChanger: false,
@@ -45,28 +40,12 @@ const CustomTable = ({
 };
 
 const Wrapper = styled.div`
-  /* ANTD Table */
   .ant-table-thead > tr > th:first-child {
     border-top-left-radius: 10px !important;
   }
 
   .ant-table-thead > tr > th:last-child {
     border-top-right-radius: 10px !important;
-  }
-
-  .ant-table-column-sorters {
-    flex-direction: row-reverse !important;
-  }
-
-  .ant-table-column-sorter-up,
-  .ant-table-column-sorter-down {
-    font-size: 20px !important;
-  }
-
-  .ant-table-column-sorter-up.active,
-  .ant-table-column-sorter-down.active {
-    color: ${(props) => props?.theme?.primary} !important;
-    font-weight: bold !important;
   }
 
   .ant-table-thead > tr > th {
@@ -79,12 +58,8 @@ const Wrapper = styled.div`
     font-weight: bold;
   }
 
-  .ant-table-thead th.ant-table-column-sort {
-    background: ${(props) => props?.theme?.blue} !important;
-  }
-
   .ant-table-thead > tr > th::before {
-    background-color: transparent !important; /** Ocultar línea de separación */
+    background-color: ${(props) => props?.theme?.primary} !important;
   }
 
   .ant-table-thead > tr > th:last-child {
@@ -122,7 +97,6 @@ const Wrapper = styled.div`
 
   .ant-pagination-item-active {
     background: ${(props) => props?.theme?.secGray} !important;
-
     margin: 0px !important;
   }
 
@@ -141,23 +115,6 @@ const Wrapper = styled.div`
   .ant-pagination.mini > li,
   .custom-item-paginator {
     border: 1px solid ${(props) => props?.theme?.gray} !important;
-  }
-
-  .ant-table-row-expand-icon {
-    padding: 10px 10px !important;
-    margin-right: 20px !important;
-  }
-
-  .ant-table-row-expand-icon::after {
-    left: 9px !important;
-  }
-
-  .ant-table-row-expand-icon::before {
-    top: 9px !important;
-  }
-
-  .ant-table-selection-column {
-    width: 100px !important;
   }
 `;
 
