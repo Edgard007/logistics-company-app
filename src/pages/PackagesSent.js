@@ -14,7 +14,7 @@ import Maps from "../components/Maps";
 const PackagesSent = ({ packages = [], onClose }) => {
   //* ==> STATES <== *//
   const [activeMarker, setActiveMarker] = useState(null);
-  const [direction, setDirection] = useState(null);
+  const [direction, setDirection] = useState([]);
 
   const containerStyle = {
     width: "100%",
@@ -24,7 +24,7 @@ const PackagesSent = ({ packages = [], onClose }) => {
   const dirCall = (response) => {
     if (response !== null) {
       if (response.status === "OK") {
-        setDirection(response);
+        setDirection((res) => [...res, response]);
       }
     }
   };
@@ -53,24 +53,27 @@ const PackagesSent = ({ packages = [], onClose }) => {
             ) : null}
           </Marker>
         ))}
-        <DirectionsService
-          options={{
-            origin: packages[0]?.location,
-            destination: packages[0 + 1]?.location,
-            travelMode: "DRIVING",
-          }}
-          callback={(res) => !direction && dirCall(res)}
-        />
 
-        {direction && (
+        {(direction || []).map((el) => (
           <DirectionsRenderer
             options={{
-              directions: direction,
+              directions: el,
               suppressMarkers: true,
               preserveViewport: true,
             }}
           />
-        )}
+        ))}
+
+        {(packages || []).map((el, i) => (
+          <DirectionsService
+            options={{
+              origin: packages[i]?.location,
+              destination: packages[i + 1]?.location,
+              travelMode: "DRIVING",
+            }}
+            callback={(res) => dirCall(res)}
+          />
+        ))}
       </Maps>
 
       <div className="contain-btns">
