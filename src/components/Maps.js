@@ -22,7 +22,7 @@ const Maps = ({ mapStyle, center, zoom, onClick, onLoad, children }) => {
       {isLoaded && (
         <GoogleMap
           mapContainerStyle={mapStyle || containerStyle}
-          center={centerDef || center}
+          center={center || centerDef}
           zoom={zoom || zoomDef}
           onClick={onClick && onClick}
           options={{

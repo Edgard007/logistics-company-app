@@ -12,6 +12,7 @@ import { getPackages, editPackages } from "./store/actions/packagesAction";
 
 // ==> Pages
 import AddPackages from "./pages/AddPackages";
+import PackagesSent from "./pages/PackagesSent";
 
 // ==> Helper
 import { alertNotification } from "./helpers/notifications";
@@ -24,9 +25,11 @@ const App = () => {
   //* ==> STATES <== *//
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   // ==> For the storage of arrays
   const [packages, setPackages] = useState([]);
+  const [sent, setSent] = useState([]); // ==> Packages sent
 
   const columns = [
     {
@@ -63,6 +66,10 @@ const App = () => {
     try {
       const packags = await getPackages();
       setPackages(packags || []);
+
+      // ==> Get sent packets
+      const filter = (packags || []).filter((el) => el?.status === "E");
+      setSent(filter || []);
     } catch (e) {
       console.error("||* ==> Error getPackages <== *||", e);
     }
@@ -108,19 +115,33 @@ const App = () => {
     <Wrapper>
       {contextHolder}
       <div className="title">
-        <h1>Logistics company</h1>
+        <h1> {!showMap ? "List of packages" : "Route to deliver"} </h1>
       </div>
       <div className="containBody">
-        <div className="header">
-          <button
-            type="button"
-            className="btn-Secundary"
-            onClick={() => setShowModal(true)}
-          >
-            New
-          </button>
-        </div>
-        <Table columns={columns} data={packages} loading={loading} />
+        {!showMap ? (
+          <>
+            <div className="header">
+              <button
+                type="button"
+                className="btn-Secundary"
+                style={{ marginRight: "20px" }}
+                onClick={() => setShowMap(true)}
+              >
+                Route to deliver
+              </button>
+              <button
+                type="button"
+                className="btn-Secundary"
+                onClick={() => setShowModal(true)}
+              >
+                New
+              </button>
+            </div>
+            <Table columns={columns} data={packages} loading={loading} />
+          </>
+        ) : (
+          <PackagesSent packages={sent} onClose={() => setShowMap(false)} />
+        )}
       </div>
       <Modal show={showModal} onClose={() => setShowModal(false)} width={1000}>
         <AddPackages

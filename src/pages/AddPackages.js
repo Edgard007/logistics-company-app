@@ -48,7 +48,8 @@ const AddPackages = ({ packages = [], onClose, onOk }) => {
     const find = (packages || []).find(
       (el) =>
         el?.location?.lat === location?.lat &&
-        el?.location?.lng === location?.lng
+        el?.location?.lng === location?.lng &&
+        el?.status === "I"
     );
 
     if (find) setError("A package is already registered at this location");
